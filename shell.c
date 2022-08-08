@@ -20,7 +20,7 @@ int main(void)
 	readsize = getline(&line, &size, stdin);
 
 	cpyline = malloc(sizeof(char) * readsize);
-	strcpy(cpyline, line);
+	_strcpy(cpyline, line);
 
 	token = strtok(line, " \n");
 
@@ -36,9 +36,8 @@ int main(void)
 	token = strtok(cpyline, " \n");
 	while (token != NULL)
 	{
-		argv[count] = malloc(sizeof(char) * strlen(token));
-		strcpy(argv[count], token);
-		printf(">>> %s\n", argv[count]);
+		argv[count] = malloc(sizeof(char) * _strlen(token));
+		_strcpy(argv[count], token);
 		count++;
 		token = strtok(NULL, " \n");
 	}
