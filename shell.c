@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
+char **environ;
+
 /**
  * main - Creating a simple shell
  *
@@ -10,7 +12,7 @@
 
 int main(void)
 {
-	char *line = NULL, *token, *cpyline = NULL;
+	char *line = NULL, *token, *cpyline = NULL, *path;
 	char **argv;
 	size_t size = 0;
 	ssize_t readsize;
@@ -20,8 +22,7 @@ int main(void)
 	readsize = getline(&line, &size, stdin);
 
 	cpyline = malloc(sizeof(char) * readsize);
-	_strcpy(cpyline, line);
-
+	strcpy(cpyline, line);
 	token = strtok(line, " \n");
 
 	while (token != NULL)
@@ -30,16 +31,21 @@ int main(void)
 		token = strtok(NULL, " \n");
 	}
 	numtokens++;
-
 	argv = malloc(sizeof(char *) * numtokens);
-
 	token = strtok(cpyline, " \n");
+
 	while (token != NULL)
 	{
 		argv[count] = malloc(sizeof(char) * _strlen(token));
-		_strcpy(argv[count], token);
+		strcpy(argv[count], token);
 		count++;
 		token = strtok(NULL, " \n");
 	}
 	argv[count] = NULL;
+
+	path = "usr/bin/" + argv[0];
+	if (execve(path, argv, environ) == -1)
+	{
+		perror("Error ");
+	}
 }

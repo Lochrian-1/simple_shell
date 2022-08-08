@@ -7,7 +7,7 @@
 #include <unistd.h>
 
 int _putchar(char c);
-int _strlen(const char *s);
+int _strlen(char *s);
 char *_strcpy(char *dest, char *src);
 
 #endif
