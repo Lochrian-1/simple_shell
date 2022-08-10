@@ -19,6 +19,7 @@ int execute(char **tokens)
 
 	if (command == NULL)
 	{
+		perror("Error ");
 		return (-1);
 	}
 	child_pid = fork();
