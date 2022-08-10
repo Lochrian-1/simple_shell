@@ -1,3 +1,6 @@
+#include "shell.h"
+#include "strfunc.c"
+#include "_putchar.c"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,13 +9,13 @@
 
 void execute(char** args)
 {
-	if (strcmp(args[0], "cd") == 0)
+	if (_strcmp(args[0], "cd") == 0)
 	{
 		chdir(args[1]);
 	}
-	else if ((strcmp(args[0], "exit") == 0))
+	else if ((_strcmp(args[0], "exit") == 0))
 	{		
-		printf("Exiting shell...\n");
+		write(STDOUT_FILENO, "Exiting shell...\n", 17);
 		exit(0);
 	}
 	else
@@ -23,7 +26,7 @@ void execute(char** args)
 
 			if (stat_code == -1)
 			{
-				printf("Error: Your command terminated incorrectly\n");
+				write(STDOUT_FILENO, "Error: Your command terminated incorrectly\n", 43);
 				exit(1);
 			}
 		}
@@ -40,7 +43,7 @@ char** parse(char* input)
 	char* token = malloc(token_buf * sizeof(char*));
 	int l = 0;
 
-	for (int i = 0; i < strlen(input); i++)
+	for (int i = 0; i < _strlen(input); i++)
 	{
 		char character = input[i];
 		
@@ -105,7 +108,7 @@ char* read_line()
 	buf = (char*) malloc(bufsize * sizeof(char));
 	if (buf == NULL)
 	{
-		printf("Error: Unable to allocate buffer");
+		write(STDOUT_FILENO, "Error: Unable to allocate buffer", 32);
 		exit(1);
 	}
 	line = getline(&buf, &bufsize, stdin);
@@ -115,8 +118,8 @@ char* read_line()
 
 int main()
 {
-	printf("Welcome to Simple_Shell!\n");
-	printf("\n");
+	write(STDOUT_FILENO, "Welcome to Simple_Shell!\n", 25);
+	_putchar('\n');
 	while (true)
 	{
 		char* input = read_line();
