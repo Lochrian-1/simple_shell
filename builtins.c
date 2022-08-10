@@ -78,7 +78,6 @@ void _env(char **args)
 	while (*env)
 	{
 		write(STDOUT_FILENO, *env, _strlen(*env));
-		*env++;
 	}
 	(void)args;
 }
