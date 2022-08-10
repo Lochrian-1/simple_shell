@@ -1,123 +1,131 @@
-#include "shell.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
+#include <stdbool.h>
 
-/**
- * _strcat - concatenates two strings
- * @dest: destination char
- * @src: source char
- *
- * Return: pathname
- */
-
-char *_strcat(char *dest, char *src)
+void execute(char** args)
 {
-	int i, n = 0;
-
-	while (dest[n] != '\0')
+	if (strcmp(args[0], "cd") == 0)
 	{
-		n++;
+		chdir(args[1]);
 	}
-
-	for (i = 0; i < n && src[i] != '\0'; i++)
+	else if ((strcmp(args[0], "exit") == 0))
+	{		
+		printf("Exiting shell...\n");
+		exit(0);
+	}
+	else
 	{
-		dest[n + i] = src[i];
-		dest[n + i] = '\0';
+		if (fork() == 0)
+		{
+			int stat_code = execvp(args[0], args);
+
+			if (stat_code == -1)
+			{
+				printf("Error: Your command terminated incorrectly\n");
+				exit(1);
+			}
+		}
 	}
-	return (dest);
 }
 
-/**
- * _strlen - returns length of string
- * @s: string
- *
- * Return: length of string
- */
+char** parse(char* input)
+{	
+	int tokens_buf = 100;
+	char** tokens = malloc(tokens_buf * sizeof(char*));
+	int k = 0;
 
-int _strlen(char *s)
-{
-	int len = 0;
+	int token_buf = 1024;
+	char* token = malloc(token_buf * sizeof(char*));
+	int l = 0;
 
-	while (s[len] != '\0')
+	for (int i = 0; i < strlen(input); i++)
 	{
-		len++;
+		char character = input[i];
+		
+		if (character == ' ')
+		{
+			if (k + 1 > tokens_buf)
+			{
+				tokens_buf += 100;
+				tokens = realloc(tokens, tokens_buf * sizeof(char*));
+			}																									
+			if (l + 1 >= token_buf)
+			{
+				token_buf += 1024;
+				token = realloc(token, token_buf);
+			}
+
+			tokens[k] = token;
+			k++;
+			token = malloc(token_buf * sizeof(char*));
+			l = 0;
+		}
+		else if (character == '\n')
+		{
+			if (k + 2 > tokens_buf)
+			{
+				tokens_buf += 100;
+				tokens = realloc(tokens, tokens_buf * sizeof(char*));
+			}
+
+			if (l + 1 > token_buf)
+			{
+				token_buf += 1024;
+				token = realloc(token, token_buf);
+			}
+			tokens[k] = token;
+			k++;
+			tokens[k] = NULL;
+			
+			break;			
+		}
+		else
+		{
+			if (l + 1 > token_buf)
+			{
+				token_buf += 1024;
+				token = realloc(token, token_buf);
+			}
+
+			token[l] = character;
+			l++;
+		}
 	}
-	return (len);
+	return tokens;
 }
 
-/**
- * *_strcpy - copies the string being pointed at
- * @dest: a char type string
- * @src: a char type string
- *
- * Return: void
- */
+char* read_line()
+{	
+	char* buf;
+	size_t bufsize = 100;
+	size_t line;
 
-char *_strcpy(char *dest, char *src)
-{
-	int i;
-
-	i = 0;
-	while (*(src + i))
+	buf = (char*) malloc(bufsize * sizeof(char));
+	if (buf == NULL)
 	{
-		dest[i] = *(src + i);
-		i++;
+		printf("Error: Unable to allocate buffer");
+		exit(1);
 	}
-	dest[i] = '\0';
-	return (dest);
+	line = getline(&buf, &bufsize, stdin);
+	
+	return buf;
 }
 
-char **environ;
-
-/**
- * main - Creating a simple shell
- *
- * Return: void
- */
-
-int main(void)
+int main()
 {
-	char *line = NULL, *token, *cpyline = NULL, *path;
-	char **argv;
-	size_t size = 0;
-	ssize_t readsize;
-	int numtokens = 0, count = 0;
-
-	write(STDIN_FILENO, "simple_shell$ ", 14);
-	readsize = getline(&line, &size, stdin);
-
-	if (readsize == -1)
+	printf("Welcome to Simple_Shell!\n");
+	printf("\n");
+	while (true)
 	{
-		write(STDIN_FILENO, "Exiting shell... \n", 18);
-		return (-1);
-	}
+		char* input = read_line();
+		char** parsed = parse(input);			                             
+		
+		execute(parsed);
 
-	cpyline = malloc(sizeof(char) * readsize);
-	_strcpy(cpyline, line);
-	token = strtok(line, " \n");
-
-	while (token != NULL)
-	{
-		numtokens++;
-		token = strtok(NULL, " \n");
-	}
-	numtokens++;
-	argv = malloc(sizeof(char *) * numtokens);
-	token = strtok(cpyline, " \n");
-
-	while (token != NULL)
-	{
-		argv[count] = malloc(sizeof(char) * _strlen(token));
-		_strcpy(argv[count], token);
-		count++;
-		token = strtok(NULL, " \n");
-	}
-	argv[count] = NULL;
-
-	path = _strcat("/usr/bin/", argv[0]);
-
-	if (execve(path, argv, environ) == -1)
-	{
-		perror("Error ");
-	}
+		free(input);
+		free(parsed);
+	}	
+	return 0;
 }
