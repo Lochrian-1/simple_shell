@@ -18,8 +18,8 @@ char **generate_tokens(char *line, ssize_t num_read)
 	cpy_line = malloc(sizeof(char) * num_read);
 	_strcpy(cpy_line, line);
 	token = strtok(line, delim);
-									
-	while(token != NULL)
+
+	while (token != NULL)
 	{
 		num_tokens++;
 		token = strtok(NULL, delim);
@@ -28,7 +28,7 @@ char **generate_tokens(char *line, ssize_t num_read)
 	tokens = malloc(sizeof(char *) * num_tokens);
 	token = strtok(cpy_line, delim);
 
-	while(token != NULL)
+	while (token != NULL)
 	{
 		tokens[i] = malloc(sizeof(char) * _strlen(token));
 		_strcpy(tokens[i], token);

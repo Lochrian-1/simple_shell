@@ -7,7 +7,7 @@
  * Return: void
  */
 
-char * _which(char *command)
+char *_which(char *command)
 {
 	char *path, *cpy_path, *path_token, *dir;
 	int command_length, dir_length;
@@ -20,14 +20,12 @@ char * _which(char *command)
 			return (command);
 		}
 	}
-
 	path = getenv("PATH");
 	if (path)
 	{
 		cpy_path = _strdup(path);
 		command_length = _strlen(command);
 		path_token = strtok(cpy_path, ":");
-
 		while (path_token != NULL)
 		{
 			dir_length = _strlen(path_token);
@@ -36,7 +34,6 @@ char * _which(char *command)
 			_strcat(dir, "/");
 			_strcat(dir, command);
 			_strcat(dir, "\0");
-
 			if (stat(dir, &testfile) == 0)
 			{
 				free(cpy_path);
@@ -47,9 +44,8 @@ char * _which(char *command)
 		}
 		free(cpy_path);
 		if (stat(command, &testfile) == 0)
-		{
 			return (command);
-		}
+
 		return (NULL);
 	}
 	return (NULL);

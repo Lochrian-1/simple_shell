@@ -31,14 +31,14 @@ int main(void)
 {
 	char *line_read, **tokens;
 	ssize_t num_read;
-	int return_code = 0;
+	int r_code = 0;
 
 	write(STDOUT_FILENO, "Welcome to Simple_Shell!\n", 25);
 	_putchar('\n');
 
 	while (1)
 	{
-		write(2, "$ ", 2);
+		write(2, "Simple_Shell$ ", 14);
 		line_read = read_line(&num_read);
 
 		if (num_read == -1)
@@ -50,11 +50,11 @@ int main(void)
 
 		if (tokens[0] != NULL)
 		{
-			return_code = execute(tokens);
+			r_code = execute(tokens);
 		}
 
 		free(tokens);
 		free(line_read);
 	}
-	return (return_code);
+	return (r_code);
 }

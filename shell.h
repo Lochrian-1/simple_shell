@@ -11,10 +11,10 @@
 
 extern char **environ;
 
-struct builtin {
+typedef struct builtin {
 	char *name;
 	void (*func)(char **args);
-};
+} builtin_t;
 
 char **generate_tokens(char *line, ssize_t num_read);
 int execute(char **tokens);

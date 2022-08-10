@@ -11,12 +11,13 @@ void built_in(char **args)
 {
 	int num_builtins = 0, i;
 
-	struct builtin builtins[] = {
+	builtin_t builtins[] = {
 		{"exit", shell_exit},
 		{"cd", _cd},
 		{"env", _env},
 	};
-	num_builtins = sizeof(builtins) / sizeof(struct builtin);
+
+	num_builtins = sizeof(builtins) / sizeof(builtin_t);
 
 	for (i = 0; i < num_builtins; i++)
 	{
@@ -67,8 +68,8 @@ void _cd(char **args)
  * _env - checks for environment
  * @args: arguments
  *
- * Return: void 
- */ 
+ * Return: void
+ */
 
 void _env(char **args)
 {
@@ -76,7 +77,7 @@ void _env(char **args)
 
 	while (*env)
 	{
-		write(STDOUT_FILENO,*env, _strlen(*env));
+		write(STDOUT_FILENO, *env, _strlen(*env));
 		*env++;
 	}
 	(void)args;
