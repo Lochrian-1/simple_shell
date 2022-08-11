@@ -1,4 +1,5 @@
 #include "shell.h"
+#include "main.h"
 
 /**
  * built_in - checks for builtin cmd
@@ -77,8 +78,7 @@ void _env(char **args)
 
 	while (*env)
 	{
-		write(STDOUT_FILENO, *env, _strlen(*env));
-		env++;
+		_printf("%s\n", *env++);
 	}
 	(void)args;
 }
