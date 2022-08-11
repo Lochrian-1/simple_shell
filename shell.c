@@ -38,7 +38,7 @@ int main(void)
 
 	while (1)
 	{
-		write(2, "Simple_Shell$ ", 14);
+		write(2, "$ ", 2);
 		line_read = read_line(&num_read);
 
 		if (num_read == -1)
