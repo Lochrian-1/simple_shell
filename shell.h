@@ -11,7 +11,14 @@
 
 extern char **environ;
 
-typedef struct builtin {
+/**
+ * struct builtin - handles the builtin commands
+ * @name: name of command
+ * @func: function for command
+ */
+
+typedef struct builtin
+{
 	char *name;
 	void (*func)(char **args);
 } builtin_t;
