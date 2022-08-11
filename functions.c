@@ -37,7 +37,7 @@ int str(va_list string)
 
 /**
  * _int - function to print integers
- * @integ: list printed
+ * @integer: list printed
  *
  * Return: Return count
  */
