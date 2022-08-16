@@ -40,7 +40,6 @@ int main(void)
 
 		if (num_read == -1)
 		{
-			write(2, "Exiting shell....\n", 18);
 			exit(1);
 		}
 		tokens = generate_tokens(line_read, num_read);
