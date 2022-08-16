@@ -33,9 +33,6 @@ int main(void)
 	ssize_t num_read;
 	int r_code = 0;
 
-	write(STDOUT_FILENO, "Welcome to Simple_Shell!\n", 25);
-	_putchar('\n');
-
 	while (1)
 	{
 		write(2, "$ ", 2);
