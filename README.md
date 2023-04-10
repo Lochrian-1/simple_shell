@@ -1,1 +1,1 @@
-# SIMPLE SHELL
+Simple Shell getting ready
